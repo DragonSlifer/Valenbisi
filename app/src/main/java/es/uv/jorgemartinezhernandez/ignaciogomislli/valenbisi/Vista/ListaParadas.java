@@ -17,16 +17,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Constants;
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.HTTPConnector;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Parada;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
 
@@ -38,15 +41,16 @@ public class ListaParadas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_lista_paradas);
         Init();
-        Collections.sort(paradas,new Parada.ParadaComparator());
+        Collections.sort(paradas, new Parada.ParadaComparator());
         l = findViewById(R.id.list);
         AdapterParadas adapterParadas = new AdapterParadas(this, paradas.toArray());
         l.setAdapter(adapterParadas);
         adapterParadas.notifyDataSetChanged();
         Context ctx = getApplicationContext();
-        l.setOnClickListener(new View.OnClickListener() {
+        l.setOnClickListener(new View.OnClickListener() {   //Error aqui
             @Override
             public void onClick(View view) {
                 int i = l.getSelectedItemPosition();
@@ -55,8 +59,8 @@ public class ListaParadas extends AppCompatActivity {
         });
     }
 
-    public void goToParadaInfo(int pos){
-        Intent i = new Intent(this,parada.class);
+    public void goToParadaInfo(int pos) {
+        Intent i = new Intent(this, parada.class);
 
         i.putExtra(Constants.CLASS_PARADA, paradas.get(pos));
 
@@ -65,32 +69,36 @@ public class ListaParadas extends AppCompatActivity {
 
     public void Init() {
         paradas = new ArrayList<>();
-
-        InputStream is = getResources().openRawResource(R.raw.valenbisi);
-        Writer writer = new StringWriter();
-        char[] buffer = new char[1024];
-        try {
-            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-            int n;
-
-            while ((n = reader.read(buffer)) != -1) {
-                writer.write(buffer, 0, n);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+        String s = "SinString";
+        //// Obtener JSON de HTTP
+        s = getJSONfromHTTP();
+        //// Obtener JSON de archivo
+        if (s == "") {
+            InputStream is = getResources().openRawResource(R.raw.valenbisi);
+            Writer writer = new StringWriter();
+            char[] buffer = new char[1024];
             try {
-                is.close();
+                Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                int n;
+
+                while ((n = reader.read(buffer)) != -1) {
+                    writer.write(buffer, 0, n);
+                }
+                s = writer.toString();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         try {
-            String s = writer.toString();
-
             System.out.println(s);
             JSONObject json = new JSONObject(s);
-            JSONArray jsonArray = (JSONArray) json.get(Constants.JSON_Parada_Lista); //<-Esta interpretando S como un JSON OBJECT
+            JSONArray jsonArray = (JSONArray) json.get(Constants.JSON_Parada_Lista);
             Parada p = new Parada();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -109,6 +117,14 @@ public class ListaParadas extends AppCompatActivity {
         }
     }
 
+    private String getJSONfromHTTP() {
+        HTTPConnector conector = new HTTPConnector();
+        conector.execute();
+
+
+        return s;
+    }
+
     public class AdapterParadas extends BaseAdapter {
         private Context context;
         private Parada[] items;
@@ -122,7 +138,7 @@ public class ListaParadas extends AppCompatActivity {
         public AdapterParadas(Context c, Object[] i) {
             this.context = c;
             this.items = new Parada[i.length];
-            for(int x = 0; x < i.length; x++) {
+            for (int x = 0; x < i.length; x++) {
                 items[x] = (Parada) i[x];
             }
         }
@@ -145,18 +161,18 @@ public class ListaParadas extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
             Parada p = items[position];
-            if(view == null){
-                view = LayoutInflater.from(context).inflate(R.layout.custom_list_row,null,false);
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.custom_list_row, null, false);
             }
             TextView t1 = view.findViewById(R.id.id_text);
             TextView t2 = view.findViewById(R.id.num_paradas);
             TextView t3 = view.findViewById(R.id.nombre_parada);
 
-            t1.setText(Integer.toString((int)p.getNumber()));
+            t1.setText(Integer.toString((int) p.getNumber()));
             t2.setText(Integer.toString(p.getPartes()));
             t3.setText(p.getAddress());
 
-            Log.d(Constants.CLASS_LISTA_PARADAS,"Imprimiendo parada en posición: " + position);
+            Log.d(Constants.CLASS_LISTA_PARADAS, "Imprimiendo parada en posición: " + position);
 
             return view;
         }
