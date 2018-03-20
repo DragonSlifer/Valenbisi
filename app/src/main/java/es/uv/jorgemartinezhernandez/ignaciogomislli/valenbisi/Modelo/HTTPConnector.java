@@ -1,6 +1,12 @@
 package es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +17,9 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.ListaParadas;
 
 
@@ -19,10 +27,18 @@ import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.ListaParadas
  * Created by Ignacio on 20/03/2018.
  */
 
-public class HTTPConnector extends AsyncTask<String,String,String> {
+public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada>> {
+
+    private ListaParadas padre;
+    public HTTPConnector(ListaParadas arg)
+    {
+        this.padre=arg;
+    }
+
     @Override
-    public String doInBackground(String... params) {
-            String result="";
+    protected ArrayList<Parada> doInBackground(String... params) {
+            String s="";
+            ArrayList<Parada> paradas = new ArrayList();
 
             String url = "http://mapas.valencia.es/lanzadera/opendata/Valenbisi/JSON";
             try {
@@ -56,25 +72,49 @@ public class HTTPConnector extends AsyncTask<String,String,String> {
 
                 buffer.close();
                 con.disconnect();
-                result = cadena.toString();
-
-
-
+                s = cadena.toString();
 
             } catch (UnsupportedEncodingException e)
             {
                 e.printStackTrace();
                 System.out.println("Error en lectura de http, leyendo de archivo");
-                return "";
             } catch (IOException e)
             {
                 e.printStackTrace();
                 System.out.println("Error en lectura de http, leyendo de archivo");
-                return "";
             }
 
-            return result;
+        try {
+            System.out.println(s);
+            JSONObject json = new JSONObject(s);
+            JSONArray jsonArray = (JSONArray) json.get(Constants.JSON_Parada_Lista);
+            Parada p = new Parada();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                JSONObject jsonChild = (JSONObject) jsonObject.get(Constants.JSON_Parada_Datos);
+                p.setNumber(Long.parseLong((jsonChild.getString(Constants.JSON_Parada_Number))));
+                p.setAddress(jsonChild.getString(Constants.JSON_Parada_Addres));
+                p.setPartes(Integer.parseInt(jsonChild.getString(Constants.JSON_Parada_Availa)));
+                paradas.add(p);
+                //System.out.println("Parada " + p.toSring());
+                p = new Parada();
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
+
+            return paradas;
+        }
+
+    @Override
+    protected void onPostExecute(ArrayList<Parada> paradas)
+    {
+        padre.refreshScreen(paradas);
     }
+
+    }
+
 

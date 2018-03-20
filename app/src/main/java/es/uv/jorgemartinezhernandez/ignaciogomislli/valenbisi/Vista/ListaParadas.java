@@ -44,19 +44,34 @@ public class ListaParadas extends AppCompatActivity {
 
         setContentView(R.layout.activity_lista_paradas);
         Init();
-        Collections.sort(paradas, new Parada.ParadaComparator());
-        l = findViewById(R.id.list);
-        AdapterParadas adapterParadas = new AdapterParadas(this, paradas.toArray());
-        l.setAdapter(adapterParadas);
-        adapterParadas.notifyDataSetChanged();
-        Context ctx = getApplicationContext();
-        l.setOnClickListener(new View.OnClickListener() {   //Error aqui
-            @Override
-            public void onClick(View view) {
-                int i = l.getSelectedItemPosition();
-                goToParadaInfo(i);
-            }
-        });
+        refreshScreen(paradas);
+
+
+    }
+
+    public void refreshScreen(ArrayList<Parada> nuevaListaParadas)
+    {
+        try {
+            Collections.sort(nuevaListaParadas, new Parada.ParadaComparator());
+            l = findViewById(R.id.list);
+            AdapterParadas adapterParadas = new AdapterParadas(this, nuevaListaParadas.toArray());
+            l.setAdapter(adapterParadas);
+            adapterParadas.notifyDataSetChanged();
+            Context ctx = getApplicationContext();
+            l.setOnClickListener(new View.OnClickListener() {   //Error aqui
+                @Override
+                public void onClick(View view) {
+                    int i = l.getSelectedItemPosition();
+                    goToParadaInfo(i);
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void goToParadaInfo(int pos) {
@@ -68,12 +83,13 @@ public class ListaParadas extends AppCompatActivity {
     }
 
     public void Init() {
-        paradas = new ArrayList<>();
-        String s = "SinString";
         //// Obtener JSON de HTTP
-        s = getJSONfromHTTP();
+        HTTPConnector conector = new HTTPConnector(this);
+        conector.execute();
         //// Obtener JSON de archivo
-        if (s == "") {
+        /*
+            String s = "";
+            paradas = new ArrayList<>();
             InputStream is = getResources().openRawResource(R.raw.valenbisi);
             Writer writer = new StringWriter();
             char[] buffer = new char[1024];
@@ -94,7 +110,6 @@ public class ListaParadas extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }
         try {
             System.out.println(s);
             JSONObject json = new JSONObject(s);
@@ -115,15 +130,10 @@ public class ListaParadas extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        */
     }
 
-    private String getJSONfromHTTP() {
-        HTTPConnector conector = new HTTPConnector();
-        conector.execute();
 
-
-        return s;
-    }
 
     public class AdapterParadas extends BaseAdapter {
         private Context context;
