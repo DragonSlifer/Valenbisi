@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Valenbisi</string>
-    <string name="title_activity_parada">parada</string>
-    <string name="datos">Datos</string>
+    <string name="title_activity_parada">paradaClass</string>
+    <string name="datos">Datos de</string>
+    <string name="n_parada">Nº Parada:</string>
+    <string name="partes">Partes:</string>
+    <string name="title_activity_partes">partes</string>
 </resources>

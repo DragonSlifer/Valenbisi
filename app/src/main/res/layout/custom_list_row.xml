@@ -19,7 +19,8 @@
             android:layout_columnSpan="2"
             android:layout_gravity="fill_horizontal"
             android:layout_margin="5dp"
-            android:gravity="start" />
+            android:gravity="start"
+            android:text="@string/n_parada" />
 
         <TextView
             android:id="@+id/num_paradas"
@@ -28,7 +29,8 @@
             android:layout_columnSpan="2"
             android:layout_gravity="fill_horizontal"
             android:layout_margin="5dp"
-            android:gravity="end" />
+            android:gravity="end"
+            android:text="@string/partes" />
 
         <TextView
             android:id="@+id/nombre_parada"

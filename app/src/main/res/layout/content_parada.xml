@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.parada"
+    tools:context="es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.paradaClass"
     tools:showIn="@layout/activity_parada">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:columnCount="3">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/datosParada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="3"
@@ -37,12 +37,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
+                android:layout_marginEnd="10dp"
                 android:gravity="left"
                 android:text="Número"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/numParada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
@@ -55,12 +56,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
+                android:layout_marginEnd="10dp"
                 android:gravity="left"
                 android:text="Dirección"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/dirParada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
@@ -73,12 +75,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
+                android:layout_marginEnd="10dp"
                 android:gravity="left"
                 android:text="Total"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/totParada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
@@ -91,12 +94,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
+                android:layout_marginEnd="10dp"
                 android:gravity="left"
                 android:text="Disponibles"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/dispParada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
@@ -109,12 +113,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
+                android:layout_marginEnd="10dp"
                 android:gravity="left"
                 android:text="Libres"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/libParada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
@@ -127,12 +132,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
+                android:layout_marginEnd="10dp"
                 android:gravity="left"
                 android:text="Coordenadas"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/coordParada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"

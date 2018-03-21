@@ -1,19 +1,23 @@
 package es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Constants;
-import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Parada;
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.GeneralMethods;
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Parada_class;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
 
 public class parada extends AppCompatActivity {
 
-    private Parada p;
+    private Parada_class p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,31 @@ public class parada extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri gmmIntentUri;
+                String[] ur = {Double.toString(p.getLat()),Double.toString(p.getLon()),p.getName()};
+                gmmIntentUri = Uri.parse(GeneralMethods.Replace(Constants.geolocation_uri,ur,"__"));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW,gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null){
+                    startActivity(mapIntent);
+                }
+            }
+        });
+
         p = getIntent().getParcelableExtra(Constants.CLASS_PARADA);
+
+        ((TextView)findViewById(R.id.datosParada)).setText(getString(R.string.datos) + " " + p.getName());
+        ((TextView)findViewById(R.id.numParada)).setText(Long.toString(p.getNumber()));
+        ((TextView)findViewById(R.id.dirParada)).setText(p.getAddress());
+        ((TextView)findViewById(R.id.totParada)).setText(Integer.toString(p.getTotal()));
+        ((TextView)findViewById(R.id.dispParada)).setText(Integer.toString(p.getDispon()));
+        ((TextView)findViewById(R.id.libParada)).setText(Integer.toString(p.getLibres()));
+        ((TextView)findViewById(R.id.coordParada)).setText(p.getCoords());
+
     }
 
 }

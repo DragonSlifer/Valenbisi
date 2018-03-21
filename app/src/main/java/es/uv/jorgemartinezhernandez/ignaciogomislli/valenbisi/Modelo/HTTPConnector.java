@@ -1,8 +1,6 @@
 package es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,15 +9,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 
-import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.ListaParadas;
 
 
@@ -27,7 +21,7 @@ import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.ListaParadas
  * Created by Ignacio on 20/03/2018.
  */
 
-public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada>> {
+public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada_class>> {
 
     private ListaParadas padre;
     public HTTPConnector(ListaParadas arg)
@@ -36,9 +30,9 @@ public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada>> {
     }
 
     @Override
-    protected ArrayList<Parada> doInBackground(String... params) {
+    protected ArrayList<Parada_class> doInBackground(String... params) {
             String s="";
-            ArrayList<Parada> paradas = new ArrayList();
+            ArrayList<Parada_class> paradaClasses = new ArrayList();
 
             String url = "http://mapas.valencia.es/lanzadera/opendata/Valenbisi/JSON";
             try {
@@ -88,16 +82,16 @@ public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada>> {
             System.out.println(s);
             JSONObject json = new JSONObject(s);
             JSONArray jsonArray = (JSONArray) json.get(Constants.JSON_Parada_Lista);
-            Parada p = new Parada();
+            //Parada_class p = new Parada_class();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                JSONObject jsonChild = (JSONObject) jsonObject.get(Constants.JSON_Parada_Datos);
+                /*JSONObject jsonChild = (JSONObject) jsonObject.get(Constants.JSON_Parada_Datos);
                 p.setNumber(Long.parseLong((jsonChild.getString(Constants.JSON_Parada_Number))));
                 p.setAddress(jsonChild.getString(Constants.JSON_Parada_Addres));
-                p.setPartes(Integer.parseInt(jsonChild.getString(Constants.JSON_Parada_Availa)));
-                paradas.add(p);
-                //System.out.println("Parada " + p.toSring());
-                p = new Parada();
+                p.setPartes(Integer.parseInt(jsonChild.getString(Constants.JSON_Parada_Availa)));*/
+                paradaClasses.add(new Parada_class(jsonObject));
+                //System.out.println("Parada_class " + p.toSring());
+                //p = new Parada_class();
 
             }
 
@@ -106,13 +100,13 @@ public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada>> {
         }
 
 
-            return paradas;
+            return paradaClasses;
         }
 
     @Override
-    protected void onPostExecute(ArrayList<Parada> paradas)
+    protected void onPostExecute(ArrayList<Parada_class> paradaClasses)
     {
-        padre.refreshScreen(paradas);
+        padre.refreshScreen(paradaClasses);
     }
 
     }

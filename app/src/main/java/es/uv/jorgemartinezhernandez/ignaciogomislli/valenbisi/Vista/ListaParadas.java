@@ -8,35 +8,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Constants;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.HTTPConnector;
-import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Parada;
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Parada_class;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
 
 public class ListaParadas extends AppCompatActivity {
 
     private ListView l;
-    private ArrayList<Parada> paradas;
+    private ArrayList<Parada_class> paradas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +37,23 @@ public class ListaParadas extends AppCompatActivity {
 
     }
 
-    public void refreshScreen(ArrayList<Parada> nuevaListaParadas)
+    public void refreshScreen(ArrayList<Parada_class> nuevaListaparada)
     {
         try {
-            Collections.sort(nuevaListaParadas, new Parada.ParadaComparator());
+            Collections.sort(nuevaListaparada, new Parada_class.ParadaComparator());
             l = findViewById(R.id.list);
-            AdapterParadas adapterParadas = new AdapterParadas(this, nuevaListaParadas.toArray());
+            AdapterParadas adapterParadas = new AdapterParadas(this, nuevaListaparada.toArray());
             l.setAdapter(adapterParadas);
             adapterParadas.notifyDataSetChanged();
             Context ctx = getApplicationContext();
-            l.setOnClickListener(new View.OnClickListener() {   //Error aqui
-                @Override
-                public void onClick(View view) {
-                    int i = l.getSelectedItemPosition();
-                    goToParadaInfo(i);
-                }
-            });
+            l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                         @Override
+                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                             Log.d("ListaParadas","Parada seleccionada en posición " + position);
+                                             goToParadaInfo(position);
+                                         }
+                                     });
+                    paradas = nuevaListaparada;
         }
         catch(Exception e)
         {
@@ -114,7 +103,7 @@ public class ListaParadas extends AppCompatActivity {
             System.out.println(s);
             JSONObject json = new JSONObject(s);
             JSONArray jsonArray = (JSONArray) json.get(Constants.JSON_Parada_Lista);
-            Parada p = new Parada();
+            Parada_class p = new Parada_class();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 JSONObject jsonChild = (JSONObject) jsonObject.get(Constants.JSON_Parada_Datos);
@@ -122,8 +111,8 @@ public class ListaParadas extends AppCompatActivity {
                 p.setAddress(jsonChild.getString(Constants.JSON_Parada_Addres));
                 p.setPartes(Integer.parseInt(jsonChild.getString(Constants.JSON_Parada_Availa)));
                 paradas.add(p);
-                //System.out.println("Parada " + p.toSring());
-                p = new Parada();
+                //System.out.println("Parada_class " + p.toSring());
+                p = new Parada_class();
 
             }
 
@@ -137,7 +126,7 @@ public class ListaParadas extends AppCompatActivity {
 
     public class AdapterParadas extends BaseAdapter {
         private Context context;
-        private Parada[] items;
+        private Parada_class[] items;
 
         class ViewHolder {
             TextView number;
@@ -147,9 +136,9 @@ public class ListaParadas extends AppCompatActivity {
 
         public AdapterParadas(Context c, Object[] i) {
             this.context = c;
-            this.items = new Parada[i.length];
+            this.items = new Parada_class[i.length];
             for (int x = 0; x < i.length; x++) {
-                items[x] = (Parada) i[x];
+                items[x] = (Parada_class) i[x];
             }
         }
 
@@ -170,7 +159,7 @@ public class ListaParadas extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
-            Parada p = items[position];
+            Parada_class p = items[position];
             if (view == null) {
                 view = LayoutInflater.from(context).inflate(R.layout.custom_list_row, null, false);
             }
@@ -178,8 +167,8 @@ public class ListaParadas extends AppCompatActivity {
             TextView t2 = view.findViewById(R.id.num_paradas);
             TextView t3 = view.findViewById(R.id.nombre_parada);
 
-            t1.setText(Integer.toString((int) p.getNumber()));
-            t2.setText(Integer.toString(p.getPartes()));
+            t1.setText(getString(R.string.n_parada) + " " + Integer.toString((int) p.getNumber()));
+            t2.setText(getString(R.string.partes) + " " + Integer.toString(p.getPartes()));
             t3.setText(p.getAddress());
 
             Log.d(Constants.CLASS_LISTA_PARADAS, "Imprimiendo parada en posición: " + position);
