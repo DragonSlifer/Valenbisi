@@ -69,7 +69,7 @@ public class DatabaseConnector extends SQLiteOpenHelper{
     public ArrayList<Partes_class> ObtenerComunicadoPorID(long ID){
         String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.paradaID + " = '" + ID + "'");
         Cursor c = db.rawQuery(select,null);
-        
+
         ArrayList<Partes_class> partes_classes = new ArrayList<>();
 
         partes_classes = Partes_class.getParteFromCursor(c);
