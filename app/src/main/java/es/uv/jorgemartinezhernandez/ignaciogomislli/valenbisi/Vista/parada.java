@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -30,8 +29,9 @@ public class parada extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(getApplicationContext(), partes.class);
+                i.putExtra(Constants.DATA_RECOVER,Constants.NO_DATA);
+                startActivity(i);
             }
         });
 
@@ -40,8 +40,8 @@ public class parada extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Uri gmmIntentUri;
-                String[] ur = {Double.toString(p.getLat()),Double.toString(p.getLon()),p.getName()};
-                gmmIntentUri = Uri.parse(GeneralMethods.Replace(Constants.geolocation_uri,ur,"__"));
+                String[] ur = {p.getCoords(),p.getName()};
+                gmmIntentUri = Uri.parse(GeneralMethods.Replace(Constants.geolocation_uri,ur,Constants.regex));
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW,gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 if (mapIntent.resolveActivity(getPackageManager()) != null){
@@ -58,7 +58,7 @@ public class parada extends AppCompatActivity {
         ((TextView)findViewById(R.id.totParada)).setText(Integer.toString(p.getTotal()));
         ((TextView)findViewById(R.id.dispParada)).setText(Integer.toString(p.getDispon()));
         ((TextView)findViewById(R.id.libParada)).setText(Integer.toString(p.getLibres()));
-        ((TextView)findViewById(R.id.coordParada)).setText(p.getCoords());
+        ((TextView)findViewById(R.id.coordParada)).setText("Lat: " + p.getLat() + " / Lon: " + p.getLon());
 
     }
 

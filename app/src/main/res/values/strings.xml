@@ -5,4 +5,21 @@
     <string name="n_parada">Nº Parada:</string>
     <string name="partes">Partes:</string>
     <string name="title_activity_partes">partes</string>
+    <string name="asunto">Asunto</string>
+    <string name="name">Name</string>
+    <string name="descripci_n">Descripción</string>
+    <string name="descripci_n_del_parte">Descripción del parte</string>
+    <string name="tipo">Tipo</string>
+    <string name="estado">Estado</string>
+    <string-array name="estados">
+        <item>Abierto</item>
+        <item>Cerrado</item>
+        <item>En proceso</item>
+    </string-array>
+    <string-array name="tipos">
+        <item>Mecánico</item>
+        <item>Eléctrico</item>
+        <item>Pintura</item>
+        <item>Obra de paleta</item>
+    </string-array>
 </resources>

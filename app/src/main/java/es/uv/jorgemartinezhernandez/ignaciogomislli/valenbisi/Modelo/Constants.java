@@ -6,6 +6,8 @@ package es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo;
  */
 
 public final class Constants {
+
+    public static final String regex = "__";
     ///< JSON strings
     public static final String JSON_Parada_Lista = "features";
     public static final String JSON_Parada_Datos = "properties";
@@ -23,13 +25,34 @@ public final class Constants {
     ///< Class identifiers
     public static final String CLASS_LISTA_PARADAS = "LIST_PAR";
     public static final String CLASS_PARADA = "PARADA";
+    public static final String CLASS_PARTES = "PARTES";
+    ///< Request codes
+    public static final String DATA_RECOVER = "DATA_RECOVER";
+    public static final String geolocation_uri = "geo:0,0?q=" + regex + ",( "+ regex +")";
     ///< Codes
-    // 000 - 099 -> Request Codes
-    public static final String geolocation_uri = "geo:0,0?q=__,__,(__)";
+    // 000 - 099
     // 100 - 199 -> Result Codes
     public static final int RESULT_OK = 100;    ///< Basic result code.
     // 200 - 299
+    public static final int NO_DATA = 200;
+    public static final int DATA = 201;
     // 300 - 399
     // 400 - 499 -> Error Codes
     public static final int RESULT_ER = 400;    ///< Basic error code.
+    ///< SQL STRINGS
+    public static final String tabla = "comunicados";
+    public static final String nombre = "nombre";
+    public static final String descripcion = "descripcion";
+    public static final String parada = "parada";
+    public static final String paradaID = "paradaID";
+    public static final String estado = "estado";
+    public static final String tipo = "tipo";
+    public static final String select = "select " + regex;
+    public static final String from_t = "from " + regex;
+    public static final String where = "where " + regex;
+    public static final String create = "create table "+ regex + "(" + regex +")";
+    public static final String update = "update " + regex +" set " + regex;
+    public static final String insert = "insert into " + regex + " (" + regex +") values (" + regex +")";
+    public static final String delete = "delete from " + regex + " where " + regex + ";";
 }
+

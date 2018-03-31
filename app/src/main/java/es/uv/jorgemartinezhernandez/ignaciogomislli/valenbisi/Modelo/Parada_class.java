@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.util.Comparator;
 import java.util.Objects;
+import uk.me.jstott.jcoord.*;
 
 /**
  * Created by Jorge on 22/02/2018.
@@ -24,11 +25,11 @@ public class Parada_class implements Parcelable {
     private int total;          ///< Total de bicicletas
     private int libres;         ///< Bicis libres
     private int dispon;         ///< Bicis disponibles
-    private double lat;           ///< Latitud
-    private double lon;           ///< Longitud
+    private double lat;         ///< Latitud
+    private double lon;         ///< Longitud
     private boolean open;       ///< Abierto
     private boolean ticket;     ///< Ticket
-    private String updated;     ///<
+    private String updated;     ///< Actualizada en fecha x
 
     public Parada_class() {
     }
@@ -55,8 +56,8 @@ public class Parada_class implements Parcelable {
             this.setPartes(0);
             ///< Geometry
             JSONArray coords = ((JSONObject) jsonObject.get(Constants.JSON_Parada_Geomet)).getJSONArray(Constants.JSON_Parada_Coords);
-            this.setLat(coords.getDouble(0));
-            this.setLon(coords.getDouble(1));
+            this.setLat(coords.getDouble(1));
+            this.setLon(coords.getDouble(0));
             Log.d("Parada_class","Coords: " + getCoords());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -227,7 +228,8 @@ public class Parada_class implements Parcelable {
     }
 
     public String getCoords (){
-        return "Lat: " + Double.toString(getLat()) + " / Lon: " + Double.toString(getLon());
+        UTMRef utm = new UTMRef(getLon(),getLat(),'N',30);
+        return Double.toString(utm.toLatLng().getLat()) + "," + Double.toString(utm.toLatLng().getLng());
     }
 
     public static class ParadaComparator implements Comparator<Parada_class> {
