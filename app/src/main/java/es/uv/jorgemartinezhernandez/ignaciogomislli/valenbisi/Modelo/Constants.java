@@ -40,6 +40,7 @@ public final class Constants {
     // 400 - 499 -> Error Codes
     public static final int RESULT_ER = 400;    ///< Basic error code.
     ///< SQL STRINGS
+    public static final String BD = "ValenbisiComunicados";
     public static final String tabla = "comunicados";
     public static final String nombre = "nombre";
     public static final String descripcion = "descripcion";

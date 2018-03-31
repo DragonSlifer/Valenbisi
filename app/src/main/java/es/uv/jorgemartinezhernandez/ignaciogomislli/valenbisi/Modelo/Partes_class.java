@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jorge on 28/03/2018.
  * Valenbisi.es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.
@@ -18,18 +20,23 @@ public class Partes_class implements Parcelable{
     public Partes_class() {
     }
 
+    public static ArrayList<Partes_class> getParteFromCursor(Cursor c){
+        ArrayList<Partes_class> partes_classArrayList = new ArrayList<>();
 
-    public Partes_class(Cursor c){
         if(c.moveToFirst()){
             do{
-                this.nombre         = c.getString(0);
-                this.descripcion    = c.getString(1);
-                this.paradaID       = c.getLong(2);
-                this.parada         = c.getString(3);
-                this.estado         = c.getInt(4);
-                this.tipo           = c.getInt(5);
+                Partes_class aux = new Partes_class();
+                aux.nombre         = c.getString(0);
+                aux.descripcion    = c.getString(1);
+                aux.paradaID       = c.getLong(2);
+                aux.parada         = c.getString(3);
+                aux.estado         = c.getInt(4);
+                aux.tipo           = c.getInt(5);
+                partes_classArrayList.add(aux);
             }while(c.moveToNext());
         }
+
+        return partes_classArrayList;
     }
 
     public Partes_class(String nombre, String descripcion, String parada, long paradaID, int estado, int tipo) {
@@ -135,5 +142,26 @@ public class Partes_class implements Parcelable{
                 ", estado=" + estado +
                 ", tipo=" + tipo +
                 '}';
+    }
+
+    public String getTipoString() {
+        String s = "";
+
+        switch (tipo){
+            case 1:
+                s = "Mecánico";
+                break;
+            case 2:
+                s = "Eléctrico";
+                break;
+            case 3:
+                s = "Pintura";
+                break;
+            case 4:
+                s = "Obra de Paleta";
+                break;
+        }
+
+        return s;
     }
 }

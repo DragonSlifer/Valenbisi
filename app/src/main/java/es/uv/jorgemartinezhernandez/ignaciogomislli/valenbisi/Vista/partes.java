@@ -55,7 +55,7 @@ public class partes extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Esto Actualiza/Inserta.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -63,7 +63,7 @@ public class partes extends AppCompatActivity {
         eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Esto elimina.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });;

@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by Jorge on 28/03/2018.
@@ -54,15 +56,24 @@ public class DatabaseConnector extends SQLiteOpenHelper{
         db.execSQL(delete);
     }
 
-    public Partes_class ObtenerComunicadoPorParada(String parada){
+    public ArrayList<Partes_class> ObtenerComunicadoPorParada(String parada){
         String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.parada + " = '" + parada + "'");
         Cursor c = db.rawQuery(select,null);
-        return new Partes_class(c);
+        ArrayList<Partes_class> partes_classes = new ArrayList<>();
+
+        partes_classes = Partes_class.getParteFromCursor(c);
+
+        return partes_classes;
     }
 
-    public Partes_class ObtenerComunicadoPorID(long ID){
+    public ArrayList<Partes_class> ObtenerComunicadoPorID(long ID){
         String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.paradaID + " = '" + ID + "'");
         Cursor c = db.rawQuery(select,null);
-        return new Partes_class(c);
+        
+        ArrayList<Partes_class> partes_classes = new ArrayList<>();
+
+        partes_classes = Partes_class.getParteFromCursor(c);
+
+        return partes_classes;
     }
 }
