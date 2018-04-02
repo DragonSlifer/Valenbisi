@@ -43,7 +43,7 @@ public class Parada_class implements Parcelable {
             ///< Properties
             JSONObject properties = (JSONObject) jsonObject.get(Constants.JSON_Parada_Datos);
             this.setName(properties.getString(Constants.JSON_Parada_Name));
-            Log.d("Parada_class","Name: " + getName());
+            //Log.d("Parada_class","Name: " + getName());
             this.setNumber(Long.parseLong((properties.getString(Constants.JSON_Parada_Number))));
             this.setAddress(properties.getString(Constants.JSON_Parada_Addres));
             if(Objects.equals(properties.getString(Constants.JSON_Parada_Open), "T"))
@@ -62,7 +62,7 @@ public class Parada_class implements Parcelable {
             JSONArray coords = ((JSONObject) jsonObject.get(Constants.JSON_Parada_Geomet)).getJSONArray(Constants.JSON_Parada_Coords);
             this.setLat(coords.getDouble(1));
             this.setLon(coords.getDouble(0));
-            Log.d("Parada_class","Coords: " + getCoords());
+            //Log.d("Parada_class","Coords: " + getCoords());
         } catch (JSONException e) {
             e.printStackTrace();
         }

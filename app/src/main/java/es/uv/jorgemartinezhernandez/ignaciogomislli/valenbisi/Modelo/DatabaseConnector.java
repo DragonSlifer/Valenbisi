@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -16,19 +17,26 @@ import java.util.ArrayList;
 public class DatabaseConnector extends SQLiteOpenHelper{
 
     private SQLiteDatabase db;
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = Constants.BD;
 
-    public DatabaseConnector(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public DatabaseConnector(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        //El problema radica en que aqui db es null
+        onCreate(db);
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         String create = GeneralMethods.generateCreateTableString(Constants.tabla,new String[]{"varchar(255) " + Constants.nombre,
                 "varchar(255) " + Constants.descripcion,"number " + Constants.paradaID, "varchar(255) "  + Constants.parada,"number " + Constants.estado,"number " + Constants.tipo});
-
         db.execSQL(create);
 
+
         this.db = db;
+
     }
 
     @Override
@@ -68,6 +76,8 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     public ArrayList<Partes_class> ObtenerComunicadoPorID(long ID){
         String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.paradaID + " = '" + ID + "'");
+        Log.d("Isnull?",select);
+        System.out.println(db);
         Cursor c = db.rawQuery(select,null);
 
         ArrayList<Partes_class> partes_classes = new ArrayList<>();

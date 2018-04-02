@@ -77,7 +77,7 @@ public class parada extends AppCompatActivity {
     }
 
     private void actualiza_Partes() {
-        DatabaseConnector db = new DatabaseConnector(this,Constants.BD,null, 1);
+        DatabaseConnector db = new DatabaseConnector(this);
         long id = p.getNumber();
         final ArrayList<Partes_class> partes = db.ObtenerComunicadoPorID(id); ///< Obtenemos todos los comunicados por ID de parada
         AdapterPartes adapterPartes = new AdapterPartes(partes, this);
@@ -132,7 +132,7 @@ public class parada extends AppCompatActivity {
             ((TextView)view.findViewById(R.id.asunto_parte)).setText(items.get(position).getNombre());
             ((TextView)view.findViewById(R.id.tipo_parte)).setText(items.get(position).getTipoString());
 
-            Log.d(Constants.CLASS_PARTES, "Imprimiendo parte en posición: " + position);
+            //Log.d(Constants.CLASS_PARTES, "Imprimiendo parte en posición: " + position);
 
             return view;
         }

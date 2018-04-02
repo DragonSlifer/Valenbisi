@@ -90,7 +90,7 @@ public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada_clas
             }
 
         try {
-            System.out.println(s);
+            //System.out.println(s);
             JSONObject json = new JSONObject(s);
             JSONArray jsonArray = (JSONArray) json.get(Constants.JSON_Parada_Lista);
             //Parada_class p = new Parada_class();
