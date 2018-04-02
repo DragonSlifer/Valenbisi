@@ -24,11 +24,22 @@ import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.ListaParadas
 public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada_class>> {
 
     private ListaParadas padre;
+
+    /**
+     * Constructor de HTTP Conector
+     * @param arg Clase desde la que se llama a esta tarea asincrona para devolver los resultados
+     */
     public HTTPConnector(ListaParadas arg)
     {
         this.padre=arg;
     }
 
+    /**
+     * Conexion a la pagina web del ayuntamiento de valencia para obtener el JSON y procesarlo para
+     * obtener el listado de paradas en un ArrayList.
+     * @param params Ninguno
+     * @return ArrayList de paradas obtenidas.
+     */
     @Override
     protected ArrayList<Parada_class> doInBackground(String... params) {
             String s="";
@@ -103,6 +114,9 @@ public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada_clas
             return paradaClasses;
         }
 
+    /**
+     * @param paradaClasses ArrayList de paradas que enviar al padre para actualizar en la vista
+     */
     @Override
     protected void onPostExecute(ArrayList<Parada_class> paradaClasses)
     {

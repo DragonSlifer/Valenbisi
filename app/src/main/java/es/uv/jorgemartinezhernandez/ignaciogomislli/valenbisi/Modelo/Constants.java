@@ -6,6 +6,9 @@ package es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo;
  */
 
 public final class Constants {
+    /**
+     * Clase con todos los valores constantes a lo largo de la aplicacion
+     */
 
     public static final String regex = "__";
     ///< JSON strings

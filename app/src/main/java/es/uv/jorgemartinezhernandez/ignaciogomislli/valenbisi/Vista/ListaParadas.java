@@ -37,6 +37,11 @@ public class ListaParadas extends AppCompatActivity {
 
     }
 
+    /**
+     * Metodo para mostrar por pantalla y almacenar las paradas de un arraylist de paradas.
+     * Se llama desde HTTP conector
+     * @param nuevaListaparada lista de paradas que va a ser guardada en la aplicacion.
+     */
     public void refreshScreen(ArrayList<Parada_class> nuevaListaparada)
     {
         try {

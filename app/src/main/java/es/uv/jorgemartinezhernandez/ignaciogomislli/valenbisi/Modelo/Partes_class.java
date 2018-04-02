@@ -20,6 +20,11 @@ public class Partes_class implements Parcelable{
     public Partes_class() {
     }
 
+    /**
+     * Constructor de partes a partir de un cursor
+     * @param c Cursor apuntando a una fila en la tabla de tipo parte
+     * @return ArrayList de partes
+     */
     public static ArrayList<Partes_class> getParteFromCursor(Cursor c){
         ArrayList<Partes_class> partes_classArrayList = new ArrayList<>();
 
@@ -39,6 +44,15 @@ public class Partes_class implements Parcelable{
         return partes_classArrayList;
     }
 
+    /**
+     * Constructor a partir de datos
+     * @param nombre Nombre del parte
+     * @param descripcion Información del parte
+     * @param parada Nombre de parada
+     * @param paradaID ID de parada
+     * @param estado Estado del parte
+     * @param tipo Tipo de parte
+     */
     public Partes_class(String nombre, String descripcion, String parada, long paradaID, int estado, int tipo) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -47,6 +61,8 @@ public class Partes_class implements Parcelable{
         this.estado = estado;
         this.tipo = tipo;
     }
+
+    //Funciones para implementar parcelable
 
     protected Partes_class(Parcel in) {
         nombre = in.readString();
@@ -83,6 +99,8 @@ public class Partes_class implements Parcelable{
             return new Partes_class[size];
         }
     };
+
+    //Getters y setters
 
     public String getNombre() {
         return nombre;

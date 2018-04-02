@@ -10,6 +10,13 @@ import java.util.Objects;
  */
 
 public class GeneralMethods {
+    /**
+     * Funcion para reemplazar en una cadena distintos campos
+     * @param cad Cadena en la que reemplazar
+     * @param rep Valores para ser emplazados
+     * @param reg Elemento a reemplazar, habitualmente '__'
+     * @return
+     */
     public static String Replace (String cad, String[] rep, String reg) {
         for(String s : rep){
             cad = cad.replaceFirst(reg,s);
@@ -18,6 +25,12 @@ public class GeneralMethods {
         return cad;
     }
 
+    /**
+     * Compactador de arrays en strings.
+     * @param array Array a ser convertido.
+     * @param separator Elemento de separación del array
+     * @return String final
+     */
     public static String arrayToString(String[] array,String separator){
         String string = "";
 
@@ -32,25 +45,19 @@ public class GeneralMethods {
     }
 
     /**
-     *
-     * @param tabla
-     * @param from
-     * @param where
-     * @return
+     * Generador de consultas Select de la base de datos
      */
     public static String generateSelectString(String tabla, String from, String where){
         String select = Constants.select + " " + Constants.from_t;
         select = select.replaceFirst(Constants.regex,tabla);
         select = select.replaceFirst(Constants.regex,from);
         select = addWhere(select,where);
+        Log.d("BD: Select",select);
         return select;
     }
 
     /**
-     *
-     * @param tabla
-     * @param campos
-     * @return
+     * Generador de comandos CreateTable de la base de datos
      */
     public static String generateCreateTableString(String tabla, String[] campos){
         String createTable = Constants.create;
@@ -58,16 +65,12 @@ public class GeneralMethods {
         createTable = createTable.replaceFirst(Constants.regex,tabla);
         campos_s = arrayToString(campos,",");
         createTable = createTable.replaceFirst(Constants.regex,campos_s);
-
+        Log.d("BD: CreateTable",createTable);
         return createTable;
     }
 
     /**
-     *
-     * @param tabla
-     * @param campos
-     * @param where
-     * @return
+     * Generador de consultas Update de la base de datos
      */
     public static String generateUpdateString(String tabla, String[] campos, String where){
         String update = Constants.update;
@@ -77,10 +80,13 @@ public class GeneralMethods {
         campos_s = arrayToString(campos,",");
         update = update.replaceFirst(Constants.regex,campos_s);
         update = addWhere(update,where);
-
+        Log.d("BD: Update",update);
         return update;
     }
 
+    /**
+     * Generador de consultas Insert a la base de datos
+     */
     public static String generateInsertString(String tabla, String[] campos, String[] valores){
         String insert = Constants.update;
         String campos_s;
@@ -95,9 +101,13 @@ public class GeneralMethods {
         } else {
             insert = null;
         }
+        Log.d("BD: Insert",insert);
         return insert;
     }
 
+    /**
+     * Generador de comandos Delete de la base de datos
+     */
     public static  String generateDeleteString(String tabla, String where){
         String delete = Constants.delete;
 
@@ -112,10 +122,13 @@ public class GeneralMethods {
         } else {
             delete = null;
         }
-
+        Log.d("BD: Delete",delete);
         return delete;
     }
 
+    /**
+     * Generador de clausulas Where para operaciones sobre la base de datos
+     */
     private static String addWhere(String cad, String where){
         if(where != null){
             cad += " " + Constants.where;

@@ -34,6 +34,10 @@ public class Parada_class implements Parcelable {
     public Parada_class() {
     }
 
+    /**
+     * Constructor de parada a partir de un objeto JSON
+     * @param jsonObject Objeto a partir del cual se construye una parada.
+     */
     public Parada_class(JSONObject jsonObject){
         try {
             ///< Properties
@@ -64,12 +68,21 @@ public class Parada_class implements Parcelable {
         }
     }
 
-    public Parada_class(long number, String address, int partes) {
-        this.number = number;
-        this.address = address;
-        this.partes = partes;
-    }
-
+    /**
+     * Constructor estandar con todos los argumentos
+     * @param number Identificador de parada
+     * @param name Nombre de parada
+     * @param address Direccion de parada
+     * @param partes Numero de partes
+     * @param total Total de huecos para bicicletas de la parada
+     * @param libres Numero de huecos libres en la parada
+     * @param dispon Numero de bicicletas disponibles en la parada
+     * @param lat Latitud de la parada
+     * @param lon Longitud de la parada
+     * @param open Booleano, si esta abierto o no
+     * @param ticket Booleano, si tiene ticket o no
+     * @param updated Fecha de actualización como texto
+     */
     public Parada_class(long number, String name, String address, int partes, int total, int libres, int dispon, double lat, double lon, boolean open, boolean ticket, String updated) {
         this.number = number;
         this.name = name;
@@ -84,6 +97,8 @@ public class Parada_class implements Parcelable {
         this.ticket = ticket;
         this.updated = updated;
     }
+
+    //Funciones para implemetación de Parcelable
 
     protected Parada_class(Parcel in) {
         number = in.readLong();
@@ -132,6 +147,8 @@ public class Parada_class implements Parcelable {
             return new Parada_class[size];
         }
     };
+
+    //Getters y Setters
 
     public long getNumber() {
         return number;
@@ -227,11 +244,19 @@ public class Parada_class implements Parcelable {
         this.updated = updated;
     }
 
+
+    /**
+     * Escritura de coordenadas en formato UTM
+     * @return coordenadas en UTM
+     */
     public String getCoords (){
         UTMRef utm = new UTMRef(getLon(),getLat(),'N',30);
         return Double.toString(utm.toLatLng().getLat()) + "," + Double.toString(utm.toLatLng().getLng());
     }
 
+    /**
+     * Comparador de paradas para realizar ordenaciones de paradas, por orden alfabetico de parada
+     */
     public static class ParadaComparator implements Comparator<Parada_class> {
         @Override
         public int compare(Parada_class o1, Parada_class o2) {
