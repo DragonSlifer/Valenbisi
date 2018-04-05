@@ -80,6 +80,7 @@ public class ListaParadas extends AppCompatActivity {
         //// Obtener JSON de HTTP
         HTTPConnector conector = new HTTPConnector(this);
         conector.execute();
+
         //// Obtener JSON de archivo
         /*
             String s = "";

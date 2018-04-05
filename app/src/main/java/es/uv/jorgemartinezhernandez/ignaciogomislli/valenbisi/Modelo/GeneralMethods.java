@@ -36,7 +36,7 @@ public class GeneralMethods {
 
         for(int i = 0; i < array.length; i++){
             string += array[i];
-            if(i++ < array.length){
+            if(i+1 < array.length){
                 string += separator;
             }
         }

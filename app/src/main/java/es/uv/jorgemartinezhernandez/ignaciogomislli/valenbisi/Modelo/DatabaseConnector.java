@@ -20,29 +20,33 @@ public class DatabaseConnector extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = Constants.BD;
 
+
     public DatabaseConnector(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        //El problema radica en que aqui db es null
-        onCreate(db);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String create = GeneralMethods.generateCreateTableString(Constants.tabla,new String[]{"varchar(255) " + Constants.nombre,
-                "varchar(255) " + Constants.descripcion,"number " + Constants.paradaID, "varchar(255) "  + Constants.parada,"number " + Constants.estado,"number " + Constants.tipo});
+        String create = GeneralMethods.generateCreateTableString(Constants.tabla,new String[]{
+                /*"varchar(255) " + */Constants.nombre +" TEXT NOT NULL",
+                /*"varchar(255) " + */Constants.descripcion+" TEXT NOT NULL",
+                /*"number " + */Constants.paradaID+" INTEGER PRIMARY KEY AUTOINCREMENT",
+                /*"varchar(255) "  + */Constants.parada+" TEXT NOT NULL",
+                /*"number " + */Constants.estado+" INTEGER NOT NULL",
+                /*"number " + */Constants.tipo+" INTEGER NOT NULL"
+        });
         db.execSQL(create);
 
-
         this.db = db;
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
 
     public void InsertarComunicado(String tabla, String[] campos, String[] valores){
         String insert = GeneralMethods.generateInsertString(tabla,campos,valores);
@@ -66,7 +70,7 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     public ArrayList<Partes_class> ObtenerComunicadoPorParada(String parada){
         String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.parada + " = '" + parada + "'");
-        Cursor c = db.rawQuery(select,null);
+        Cursor c = getReadableDatabase().rawQuery(select,null);
         ArrayList<Partes_class> partes_classes = new ArrayList<>();
 
         partes_classes = Partes_class.getParteFromCursor(c);
@@ -78,7 +82,7 @@ public class DatabaseConnector extends SQLiteOpenHelper{
         String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.paradaID + " = '" + ID + "'");
         Log.d("Isnull?",select);
         System.out.println(db);
-        Cursor c = db.rawQuery(select,null);
+        Cursor c = getReadableDatabase().rawQuery(select,null);
 
         ArrayList<Partes_class> partes_classes = new ArrayList<>();
 
