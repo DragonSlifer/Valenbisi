@@ -9,7 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.Calendar;
+
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Constants;
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.DatabaseConnector;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Partes_class;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
 
@@ -19,16 +22,20 @@ public class partes extends AppCompatActivity {
     private EditText asunto, descripcion;
     private Spinner estado, tipo;
     private ArrayAdapter<String> estadoAdapter, tipoAdapter;
+    private DatabaseConnector databaseConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partes);
 
-        if (Constants.DATA == getIntent().getIntExtra(Constants.DATA_RECOVER,Constants.NO_DATA))
+        if (Constants.DATA == getIntent().getIntExtra(Constants.DATA_RECOVER,Constants.NO_DATA)) {
             partes_class = getIntent().getParcelableExtra(Constants.CLASS_PARTES);
-        else
+            databaseConnector = getIntent().getParcelableExtra(Constants.CLASS_DATABASE);
+        } else {
             partes_class = null;
+            databaseConnector = new DatabaseConnector(this);
+        }
 
         asunto = findViewById(R.id.asunto);
         descripcion = findViewById(R.id.descripcion);
@@ -57,6 +64,18 @@ public class partes extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Esto Actualiza/Inserta.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                if(partes_class.getDate() == null){ ///< Insert
+                    partes_class.setDate(Calendar.getInstance().getTime());
+                    String[] campos = partes_class.getCampos();
+                    String[] valores = partes_class.getValores();
+                    databaseConnector.InsertarComunicado(Constants.tabla,campos,valores);
+                } else {                            ///< Update
+                    String[] campos = partes_class.getCampos();
+                    String[] valores = partes_class.getValores();
+                    databaseConnector.ActualizarComunicado(Constants.tabla,valores,Constants.date + " = '" + partes_class.getDate().toString() + "'" +
+                            " and " + Constants.paradaID + " = " + partes_class.getParadaID());
+                }
+
             }
         });
         FloatingActionButton eliminar  = findViewById(R.id.delete);

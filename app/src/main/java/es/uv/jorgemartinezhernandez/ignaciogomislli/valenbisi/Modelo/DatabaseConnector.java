@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -30,12 +32,14 @@ public class DatabaseConnector extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 
         String create = GeneralMethods.generateCreateTableString(Constants.tabla,new String[]{
-                /*"varchar(255) " + */Constants.nombre +" TEXT NOT NULL",
-                /*"varchar(255) " + */Constants.descripcion+" TEXT NOT NULL",
-                /*"number " + */Constants.paradaID+" INTEGER PRIMARY KEY AUTOINCREMENT",
-                /*"varchar(255) "  + */Constants.parada+" TEXT NOT NULL",
-                /*"number " + */Constants.estado+" INTEGER NOT NULL",
-                /*"number " + */Constants.tipo+" INTEGER NOT NULL"
+                Constants.nombre        + " TEXT NOT NULL",
+                Constants.descripcion   + " TEXT NOT NULL",
+                Constants.paradaID      + " INTEGER NOT NULL",
+                Constants.parada        + " TEXT NOT NULL",
+                Constants.estado        + " INTEGER NOT NULL",
+                Constants.tipo          + " INTEGER NOT NULL",
+                Constants.date          + " TEXT NOT NULL",
+                "PRIMARY KEY (" + Constants.date + ", Constants.paradaID)"
         });
         db.execSQL(create);
 
@@ -45,6 +49,35 @@ public class DatabaseConnector extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public ArrayList<Map<String,String>> generalSelect_1Table(String camps, String from, String where){
+        ArrayList<Map<String,String>> retval = new ArrayList<>();
+
+        String select = GeneralMethods.generateSelectString(camps,from,where);
+        Cursor cursor = getReadableDatabase().rawQuery(select,null);
+
+        if(cursor.moveToFirst()){
+            do{
+                Map<String,String> map = new HashMap<>();
+                int columns = cursor.getColumnCount();
+                for (int i = 0; i < columns; i++){
+                    switch (cursor.getType(i)){
+                        case Cursor.FIELD_TYPE_INTEGER:
+                            map.put(cursor.getColumnName(i) + Constants.regex + "I",Integer.toString(cursor.getInt(i)));
+                            break;
+                        case Cursor.FIELD_TYPE_FLOAT:
+                            map.put(cursor.getColumnName(i) + Constants.regex + "F",Float.toString(cursor.getFloat(i)));
+                            break;
+                        case Cursor.FIELD_TYPE_STRING:
+                            map.put(cursor.getColumnName(i) + Constants.regex + "S",cursor.getString(i));
+                        break;
+                    }
+                }
+                retval.add(map);
+            }while (cursor.moveToNext());
+        }
+        return retval;
     }
 
 

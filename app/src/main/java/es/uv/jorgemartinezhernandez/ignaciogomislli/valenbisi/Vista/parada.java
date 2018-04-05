@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +34,10 @@ public class parada extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parada);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +47,7 @@ public class parada extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        FloatingActionButton fab2 = findViewById(R.id.fab2);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,7 +77,7 @@ public class parada extends AppCompatActivity {
     }
 
     private void actualiza_Partes() {
-        DatabaseConnector db = new DatabaseConnector(this);
+        final DatabaseConnector db = new DatabaseConnector(this);
         long id = p.getNumber();
         final ArrayList<Partes_class> partes = db.ObtenerComunicadoPorID(id); ///< Obtenemos todos los comunicados por ID de parada
         AdapterPartes adapterPartes = new AdapterPartes(partes, this);
@@ -89,6 +89,8 @@ public class parada extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), partes.class);
                 i.putExtra(Constants.DATA_RECOVER,Constants.DATA);           ///< Parte existente
                 i.putExtra(Constants.CLASS_PARTES,partes.get(position));
+                DatabaseConnector databaseConnector = db;
+                i.putExtra(Constants.CLASS_DATABASE, (Parcelable) databaseConnector);
                 startActivity(i);
             }
         });

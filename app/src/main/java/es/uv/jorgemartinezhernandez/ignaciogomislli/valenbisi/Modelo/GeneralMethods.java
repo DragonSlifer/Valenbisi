@@ -47,9 +47,9 @@ public class GeneralMethods {
     /**
      * Generador de consultas Select de la base de datos
      */
-    public static String generateSelectString(String tabla, String from, String where){
+    public static String generateSelectString(String seleccion, String from, String where){
         String select = Constants.select + " " + Constants.from_t;
-        select = select.replaceFirst(Constants.regex,tabla);
+        select = select.replaceFirst(Constants.regex,seleccion);
         select = select.replaceFirst(Constants.regex,from);
         select = addWhere(select,where);
         Log.d("BD: Select",select);

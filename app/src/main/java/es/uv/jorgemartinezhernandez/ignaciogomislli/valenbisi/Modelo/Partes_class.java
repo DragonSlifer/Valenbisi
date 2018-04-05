@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Jorge on 28/03/2018.
@@ -16,6 +17,7 @@ public class Partes_class implements Parcelable{
     private long paradaID;
     private int estado;
     private int tipo;
+    private Date date;
 
     public Partes_class() {
     }
@@ -150,18 +152,6 @@ public class Partes_class implements Parcelable{
         this.paradaID = paradaID;
     }
 
-    @Override
-    public String toString() {
-        return "Partes_class{" +
-                "nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", parada='" + parada + '\'' +
-                ", paradaID=" + paradaID +
-                ", estado=" + estado +
-                ", tipo=" + tipo +
-                '}';
-    }
-
     public String getTipoString() {
         String s = "";
 
@@ -181,5 +171,49 @@ public class Partes_class implements Parcelable{
         }
 
         return s;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String[] getCampos(){
+        return new String[]{
+                Constants.paradaID,
+                Constants.date,
+                Constants.parada,
+                Constants.descripcion,
+                Constants.nombre,
+                Constants.estado,
+                Constants.tipo
+        };
+    }
+
+    public String[] getValores(){
+        return new String[]{
+                Long.toString(this.paradaID),
+                "'" + this.date.toString() + "'",
+                "'" + this.parada + "'",
+                "'" + this.descripcion + "'",
+                "'" + this.nombre + "'",
+                Integer.toString(this.estado),
+                Integer.toString(this.tipo)
+        };
+    }
+
+    @Override
+    public String toString() {
+        return "Partes_class{" +
+                "nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", parada='" + parada + '\'' +
+                ", paradaID=" + paradaID +
+                ", estado=" + estado +
+                ", tipo=" + tipo +
+                '}';
     }
 }

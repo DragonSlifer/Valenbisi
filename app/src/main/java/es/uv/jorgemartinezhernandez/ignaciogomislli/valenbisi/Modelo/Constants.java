@@ -29,6 +29,7 @@ public final class Constants {
     public static final String CLASS_LISTA_PARADAS = "LIST_PAR";
     public static final String CLASS_PARADA = "PARADA";
     public static final String CLASS_PARTES = "PARTES";
+    public static final String CLASS_DATABASE = "DATABASE_CONNECTOR";
     ///< Request codes
     public static final String DATA_RECOVER = "DATA_RECOVER";
     public static final String geolocation_uri = "geo:0,0?q=" + regex + ",( "+ regex +")";
@@ -51,6 +52,7 @@ public final class Constants {
     public static final String paradaID = "paradaID";
     public static final String estado = "estado";
     public static final String tipo = "tipo";
+    public static final String date = "fecha";
     public static final String select = "select " + regex;
     public static final String from_t = "from " + regex;
     public static final String where = "where " + regex;
