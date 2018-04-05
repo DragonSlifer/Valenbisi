@@ -23,18 +23,21 @@ public class partes extends AppCompatActivity {
     private Spinner estado, tipo;
     private ArrayAdapter<String> estadoAdapter, tipoAdapter;
     private DatabaseConnector databaseConnector;
+    private long IDparada;
+    private String parada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partes);
-
+        IDparada=getIntent().getLongExtra("id",IDparada);
+        parada=getIntent().getStringExtra("parada");
+        System.out.println(IDparada+parada);
+        databaseConnector = getIntent().getParcelableExtra(Constants.CLASS_DATABASE);
         if (Constants.DATA == getIntent().getIntExtra(Constants.DATA_RECOVER,Constants.NO_DATA)) {
             partes_class = getIntent().getParcelableExtra(Constants.CLASS_PARTES);
-            databaseConnector = getIntent().getParcelableExtra(Constants.CLASS_DATABASE);
         } else {
             partes_class = null;
-            databaseConnector = new DatabaseConnector(this);
         }
 
         asunto = findViewById(R.id.asunto);
@@ -62,14 +65,19 @@ public class partes extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Esto Actualiza/Inserta.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                if(partes_class.getDate() == null){ ///< Insert
+                /*Snackbar.make(view, "Esto Actualiza/Inserta.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+
+
+
+                if(partes_class == null){ ///< Insert
+                    partes_class = new Partes_class(asunto.getText().toString(),descripcion.getText().toString(),parada,IDparada,estado.getSelectedItemPosition(),tipo.getSelectedItemPosition());
                     partes_class.setDate(Calendar.getInstance().getTime());
                     String[] campos = partes_class.getCampos();
                     String[] valores = partes_class.getValores();
                     databaseConnector.InsertarComunicado(Constants.tabla,campos,valores);
                 } else {                            ///< Update
+                    partes_class = new Partes_class(asunto.getText().toString(),descripcion.getText().toString(),parada,IDparada,estado.getSelectedItemPosition(),tipo.getSelectedItemPosition());
                     String[] campos = partes_class.getCampos();
                     String[] valores = partes_class.getValores();
                     databaseConnector.ActualizarComunicado(Constants.tabla,valores,Constants.date + " = '" + partes_class.getDate().toString() + "'" +
@@ -82,9 +90,11 @@ public class partes extends AppCompatActivity {
         eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Esto elimina.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Esto elimina.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                databaseConnector.BorrarComunicado(Constants.tabla,Constants.date + " = '" + partes_class.getDate().toString() + "'" +
+                        " and " + Constants.paradaID + " = " + partes_class.getParadaID());
             }
-        });;
+        });
     }
 }

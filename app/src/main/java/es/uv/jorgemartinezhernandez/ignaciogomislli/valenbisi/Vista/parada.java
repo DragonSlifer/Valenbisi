@@ -29,6 +29,7 @@ public class parada extends AppCompatActivity {
 
     private Parada_class p;
     private ListView l;
+    private DatabaseConnector db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,10 @@ public class parada extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), partes.class);
                 i.putExtra(Constants.DATA_RECOVER,Constants.NO_DATA);           ///< Parte nuevo
+                i.putExtra("id",p.getNumber());
+                i.putExtra("parada",p.getAddress());
+                DatabaseConnector databaseConnector = db;
+                i.putExtra(Constants.CLASS_DATABASE, (Parcelable) databaseConnector);
                 startActivity(i);
             }
         });
@@ -77,7 +82,7 @@ public class parada extends AppCompatActivity {
     }
 
     private void actualiza_Partes() {
-        final DatabaseConnector db = new DatabaseConnector(this);
+        db = new DatabaseConnector(this);
         long id = p.getNumber();
         final ArrayList<Partes_class> partes = db.ObtenerComunicadoPorID(id); ///< Obtenemos todos los comunicados por ID de parada
         AdapterPartes adapterPartes = new AdapterPartes(partes, this);
@@ -91,6 +96,8 @@ public class parada extends AppCompatActivity {
                 i.putExtra(Constants.CLASS_PARTES,partes.get(position));
                 DatabaseConnector databaseConnector = db;
                 i.putExtra(Constants.CLASS_DATABASE, (Parcelable) databaseConnector);
+                i.putExtra("id",p.getNumber());
+                i.putExtra("parada",p.getAddress());
                 startActivity(i);
             }
         });
