@@ -177,8 +177,6 @@ public class ListaParadas extends AppCompatActivity {
             t2.setText(getString(R.string.partes) + " " + Integer.toString(p.getPartes()));
             t3.setText(p.getAddress());
 
-            Log.d(Constants.CLASS_LISTA_PARADAS, "Imprimiendo parada en posición: " + position);
-
             return view;
         }
     }

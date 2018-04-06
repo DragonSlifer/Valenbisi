@@ -37,17 +37,13 @@ public class parada extends AppCompatActivity {
         setContentView(R.layout.activity_parada);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), partes.class);
                 i.putExtra(Constants.DATA_RECOVER,Constants.NO_DATA);           ///< Parte nuevo
-                i.putExtra("id",p.getNumber());
-                i.putExtra("parada",p.getAddress());
-                DatabaseConnector databaseConnector = db;
-                i.putExtra(Constants.CLASS_DATABASE, (Parcelable) databaseConnector);
+                i.putExtra(Constants.CLASS_PARADA,p);
                 startActivity(i);
             }
         });
@@ -94,10 +90,8 @@ public class parada extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), partes.class);
                 i.putExtra(Constants.DATA_RECOVER,Constants.DATA);           ///< Parte existente
                 i.putExtra(Constants.CLASS_PARTES,partes.get(position));
-                DatabaseConnector databaseConnector = db;
-                i.putExtra(Constants.CLASS_DATABASE, (Parcelable) databaseConnector);
-                i.putExtra("id",p.getNumber());
-                i.putExtra("parada",p.getAddress());
+                //i.putExtra(Constants.CLASS_DATABASE, (Parcelable) databaseConnector);
+                i.putExtra(Constants.CLASS_PARADA,p);
                 startActivity(i);
             }
         });

@@ -1,5 +1,6 @@
 package es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import java.util.Calendar;
 
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Constants;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.DatabaseConnector;
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Parada_class;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Partes_class;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
 
@@ -23,17 +25,14 @@ public class partes extends AppCompatActivity {
     private Spinner estado, tipo;
     private ArrayAdapter<String> estadoAdapter, tipoAdapter;
     private DatabaseConnector databaseConnector;
-    private long IDparada;
-    private String parada;
+    private Parada_class parada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partes);
-        IDparada=getIntent().getLongExtra("id",IDparada);
-        parada=getIntent().getStringExtra("parada");
-        System.out.println(IDparada+parada);
-        databaseConnector = getIntent().getParcelableExtra(Constants.CLASS_DATABASE);
+        parada = getIntent().getParcelableExtra(Constants.CLASS_PARADA);
+        databaseConnector = new DatabaseConnector(this);
         if (Constants.DATA == getIntent().getIntExtra(Constants.DATA_RECOVER,Constants.NO_DATA)) {
             partes_class = getIntent().getParcelableExtra(Constants.CLASS_PARTES);
         } else {
@@ -71,19 +70,21 @@ public class partes extends AppCompatActivity {
 
 
                 if(partes_class == null){ ///< Insert
-                    partes_class = new Partes_class(asunto.getText().toString(),descripcion.getText().toString(),parada,IDparada,estado.getSelectedItemPosition(),tipo.getSelectedItemPosition());
+                    partes_class = new Partes_class(asunto.getText().toString(),descripcion.getText().toString(),parada.getName(),parada.getNumber(),estado.getSelectedItemPosition(),tipo.getSelectedItemPosition());
                     partes_class.setDate(Calendar.getInstance().getTime());
                     String[] campos = partes_class.getCampos();
                     String[] valores = partes_class.getValores();
                     databaseConnector.InsertarComunicado(Constants.tabla,campos,valores);
                 } else {                            ///< Update
-                    partes_class = new Partes_class(asunto.getText().toString(),descripcion.getText().toString(),parada,IDparada,estado.getSelectedItemPosition(),tipo.getSelectedItemPosition());
+                    partes_class = new Partes_class(asunto.getText().toString(),descripcion.getText().toString(),parada.getName(),parada.getNumber(),estado.getSelectedItemPosition(),tipo.getSelectedItemPosition());
                     String[] campos = partes_class.getCampos();
                     String[] valores = partes_class.getValores();
                     databaseConnector.ActualizarComunicado(Constants.tabla,valores,Constants.date + " = '" + partes_class.getDate().toString() + "'" +
                             " and " + Constants.paradaID + " = " + partes_class.getParadaID());
                 }
-
+                Intent i = new Intent(getApplicationContext(), parada.class);
+                i.putExtra(Constants.CLASS_PARADA, parada);
+                startActivity(i);
             }
         });
         FloatingActionButton eliminar  = findViewById(R.id.delete);
@@ -94,6 +95,9 @@ public class partes extends AppCompatActivity {
                         .setAction("Action", null).show();*/
                 databaseConnector.BorrarComunicado(Constants.tabla,Constants.date + " = '" + partes_class.getDate().toString() + "'" +
                         " and " + Constants.paradaID + " = " + partes_class.getParadaID());
+                Intent i = new Intent(getApplicationContext(), parada.class);
+                i.putExtra(Constants.CLASS_PARADA, parada);
+                startActivity(i);
             }
         });
     }
