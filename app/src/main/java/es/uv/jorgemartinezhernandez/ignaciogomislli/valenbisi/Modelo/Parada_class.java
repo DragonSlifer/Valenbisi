@@ -2,7 +2,6 @@ package es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,7 +9,8 @@ import org.json.JSONObject;
 
 import java.util.Comparator;
 import java.util.Objects;
-import uk.me.jstott.jcoord.*;
+
+import uk.me.jstott.jcoord.UTMRef;
 
 /**
  * Created by Jorge on 22/02/2018.
@@ -36,9 +36,10 @@ public class Parada_class implements Parcelable {
 
     /**
      * Constructor de parada a partir de un objeto JSON
+     *
      * @param jsonObject Objeto a partir del cual se construye una parada.
      */
-    public Parada_class(JSONObject jsonObject){
+    public Parada_class(JSONObject jsonObject) {
         try {
             ///< Properties
             JSONObject properties = (JSONObject) jsonObject.get(Constants.JSON_Parada_Datos);
@@ -46,16 +47,10 @@ public class Parada_class implements Parcelable {
             //Log.d("Parada_class","Name: " + getName());
             this.setNumber(Long.parseLong((properties.getString(Constants.JSON_Parada_Number))));
             this.setAddress(properties.getString(Constants.JSON_Parada_Addres));
-            if(Objects.equals(properties.getString(Constants.JSON_Parada_Open), "T"))
-                open = true;
-            else
-                open = false;
+            open = Objects.equals(properties.getString(Constants.JSON_Parada_Open), "T");
             this.setDispon(properties.getInt(Constants.JSON_Parada_Availa));
             this.setLibres(properties.getInt(Constants.JSON_Parada_Free));
-            if(Objects.equals(properties.getString(Constants.JSON_Parada_Ticket), "T"))
-                ticket = true;
-            else
-                ticket = false;
+            ticket = Objects.equals(properties.getString(Constants.JSON_Parada_Ticket), "T");
             this.setUpdated(properties.getString(Constants.JSON_Parada_UpDate));
             this.setPartes(0);
             ///< Geometry
@@ -63,6 +58,7 @@ public class Parada_class implements Parcelable {
             this.setLat(coords.getDouble(1));
             this.setLon(coords.getDouble(0));
             //Log.d("Parada_class","Coords: " + getCoords());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -70,17 +66,18 @@ public class Parada_class implements Parcelable {
 
     /**
      * Constructor estandar con todos los argumentos
-     * @param number Identificador de parada
-     * @param name Nombre de parada
+     *
+     * @param number  Identificador de parada
+     * @param name    Nombre de parada
      * @param address Direccion de parada
-     * @param partes Numero de partes
-     * @param total Total de huecos para bicicletas de la parada
-     * @param libres Numero de huecos libres en la parada
-     * @param dispon Numero de bicicletas disponibles en la parada
-     * @param lat Latitud de la parada
-     * @param lon Longitud de la parada
-     * @param open Booleano, si esta abierto o no
-     * @param ticket Booleano, si tiene ticket o no
+     * @param partes  Numero de partes
+     * @param total   Total de huecos para bicicletas de la parada
+     * @param libres  Numero de huecos libres en la parada
+     * @param dispon  Numero de bicicletas disponibles en la parada
+     * @param lat     Latitud de la parada
+     * @param lon     Longitud de la parada
+     * @param open    Booleano, si esta abierto o no
+     * @param ticket  Booleano, si tiene ticket o no
      * @param updated Fecha de actualización como texto
      */
     public Parada_class(long number, String name, String address, int partes, int total, int libres, int dispon, double lat, double lon, boolean open, boolean ticket, String updated) {
@@ -247,10 +244,11 @@ public class Parada_class implements Parcelable {
 
     /**
      * Escritura de coordenadas en formato UTM
+     *
      * @return coordenadas en UTM
      */
-    public String getCoords (){
-        UTMRef utm = new UTMRef(getLon(),getLat(),'N',30);
+    public String getCoords() {
+        UTMRef utm = new UTMRef(getLon(), getLat(), 'N', 30);
         return Double.toString(utm.toLatLng().getLat()) + "," + Double.toString(utm.toLatLng().getLng());
     }
 

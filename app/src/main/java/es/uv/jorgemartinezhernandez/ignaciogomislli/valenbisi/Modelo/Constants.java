@@ -30,9 +30,10 @@ public final class Constants {
     public static final String CLASS_PARADA = "PARADA";
     public static final String CLASS_PARTES = "PARTES";
     public static final String CLASS_DATABASE = "DATABASE_CONNECTOR";
+    public static final String DATE = "DATE";
     ///< Request codes
     public static final String DATA_RECOVER = "DATA_RECOVER";
-    public static final String geolocation_uri = "geo:0,0?q=" + regex + ",( "+ regex +")";
+    public static final String geolocation_uri = "geo:0,0?q=" + regex + ",( " + regex + ")";
     ///< Codes
     // 000 - 099
     // 100 - 199 -> Result Codes
@@ -56,9 +57,11 @@ public final class Constants {
     public static final String select = "select " + regex;
     public static final String from_t = "from " + regex;
     public static final String where = "where " + regex;
-    public static final String create = "create table "+ regex + "(" + regex +")";
-    public static final String update = "update " + regex +" set " + regex;
-    public static final String insert = "insert into " + regex + " (" + regex +") values (" + regex +")";
+    public static final String create = "create table " + regex + "(" + regex + ")";
+    public static final String update = "update " + regex + " set " + regex;
+    public static final String set = "set ";
+    public static final String camps = regex + " = " + regex;
+    public static final String insert = "insert into " + regex + " (" + regex + ") values (" + regex + ")";
     public static final String delete = "delete from " + regex + " where " + regex + ";";
 }
 

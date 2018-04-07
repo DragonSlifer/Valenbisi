@@ -20,7 +20,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tipo"
-        app:srcCompat="@drawable/ic_delete_black_24dp" android:focusable="true" />
+        app:srcCompat="@drawable/ic_delete_black_24dp"
+        android:focusable="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/ok"
@@ -34,7 +35,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tipo"
-        app:srcCompat="@drawable/ic_check_black_24dp" android:focusable="true" />
+        app:srcCompat="@drawable/ic_check_black_24dp"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/textView"

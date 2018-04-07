@@ -21,73 +21,70 @@ import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Vista.ListaParadas
  * Created by Ignacio on 20/03/2018.
  */
 
-public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada_class>> {
+public class HTTPConnector extends AsyncTask<String, String, ArrayList<Parada_class>> {
 
     private ListaParadas padre;
 
     /**
      * Constructor de HTTP Conector
+     *
      * @param arg Clase desde la que se llama a esta tarea asincrona para devolver los resultados
      */
-    public HTTPConnector(ListaParadas arg)
-    {
-        this.padre=arg;
+    public HTTPConnector(ListaParadas arg) {
+        this.padre = arg;
     }
 
     /**
      * Conexion a la pagina web del ayuntamiento de valencia para obtener el JSON y procesarlo para
      * obtener el listado de paradas en un ArrayList.
+     *
      * @param params Ninguno
      * @return ArrayList de paradas obtenidas.
      */
     @Override
     protected ArrayList<Parada_class> doInBackground(String... params) {
-            String s="";
-            ArrayList<Parada_class> paradaClasses = new ArrayList();
+        String s = "";
+        ArrayList<Parada_class> paradaClasses = new ArrayList();
 
-            String url = "http://mapas.valencia.es/lanzadera/opendata/Valenbisi/JSON";
-            try {
+        String url = "http://mapas.valencia.es/lanzadera/opendata/Valenbisi/JSON";
+        try {
 
-                URL obj = new URL(url);
-                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-                con.setRequestMethod("GET");
-                //add request header
-                con.setRequestProperty("user-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
-                con.setRequestProperty("accept", "application/json;");
-                con.setRequestProperty("accept-language", "es");
+            con.setRequestMethod("GET");
+            //add request header
+            con.setRequestProperty("user-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
+            con.setRequestProperty("accept", "application/json;");
+            con.setRequestProperty("accept-language", "es");
 
-                con.connect();  //Peta aqui!
+            con.connect();  //Peta aqui!
 
-                int responseCode = con.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_OK)
-                {
-                    throw new IOException("HTTP error code: " + responseCode);
-                }
-
-
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-                StringBuilder cadena= new StringBuilder();
-
-                String linea="";
-                while ((linea=buffer.readLine()) != null)
-                {
-                    cadena.append(linea+"\n");
-                }
-
-                buffer.close();
-                con.disconnect();
-                s = cadena.toString();
-
-            } catch (UnsupportedEncodingException e)
-            {
-                e.printStackTrace();
-                System.out.println("Error en lectura de http, leyendo de archivo");
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-                System.out.println("Error en lectura de http, leyendo de archivo");
+            int responseCode = con.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                throw new IOException("HTTP error code: " + responseCode);
             }
+
+
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            StringBuilder cadena = new StringBuilder();
+
+            String linea = "";
+            while ((linea = buffer.readLine()) != null) {
+                cadena.append(linea + "\n");
+            }
+
+            buffer.close();
+            con.disconnect();
+            s = cadena.toString();
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            System.out.println("Error en lectura de http, leyendo de archivo");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error en lectura de http, leyendo de archivo");
+        }
 
         try {
             //System.out.println(s);
@@ -111,18 +108,17 @@ public class HTTPConnector extends AsyncTask<String,String,ArrayList<Parada_clas
         }
 
 
-            return paradaClasses;
-        }
+        return paradaClasses;
+    }
 
     /**
      * @param paradaClasses ArrayList de paradas que enviar al padre para actualizar en la vista
      */
     @Override
-    protected void onPostExecute(ArrayList<Parada_class> paradaClasses)
-    {
+    protected void onPostExecute(ArrayList<Parada_class> paradaClasses) {
         padre.refreshScreen(paradaClasses);
     }
 
-    }
+}
 
 

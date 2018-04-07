@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +42,8 @@ public class parada extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), partes.class);
-                i.putExtra(Constants.DATA_RECOVER,Constants.NO_DATA);           ///< Parte nuevo
-                i.putExtra(Constants.CLASS_PARADA,p);
+                i.putExtra(Constants.DATA_RECOVER, Constants.NO_DATA);           ///< Parte nuevo
+                i.putExtra(Constants.CLASS_PARADA, p);
                 startActivity(i);
             }
         });
@@ -53,11 +53,11 @@ public class parada extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Uri gmmIntentUri;
-                String[] ur = {p.getCoords(),p.getName()};
-                gmmIntentUri = Uri.parse(GeneralMethods.Replace(Constants.geolocation_uri,ur,Constants.regex));
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW,gmmIntentUri);
+                String[] ur = {p.getCoords(), p.getName()};
+                gmmIntentUri = Uri.parse(GeneralMethods.Replace(Constants.geolocation_uri, ur, Constants.regex));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
-                if (mapIntent.resolveActivity(getPackageManager()) != null){
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(mapIntent);
                 }
             }
@@ -65,13 +65,13 @@ public class parada extends AppCompatActivity {
 
         p = getIntent().getParcelableExtra(Constants.CLASS_PARADA);
 
-        ((TextView)findViewById(R.id.datosParada)).setText(getString(R.string.datos) + " " + p.getName());
-        ((TextView)findViewById(R.id.numParada)).setText(Long.toString(p.getNumber()));
-        ((TextView)findViewById(R.id.dirParada)).setText(p.getAddress());
-        ((TextView)findViewById(R.id.totParada)).setText(Integer.toString(p.getTotal()));
-        ((TextView)findViewById(R.id.dispParada)).setText(Integer.toString(p.getDispon()));
-        ((TextView)findViewById(R.id.libParada)).setText(Integer.toString(p.getLibres()));
-        ((TextView)findViewById(R.id.coordParada)).setText("Lat: " + p.getLat() + " / Lon: " + p.getLon());
+        ((TextView) findViewById(R.id.datosParada)).setText(getString(R.string.datos) + " " + p.getName());
+        ((TextView) findViewById(R.id.numParada)).setText(Long.toString(p.getNumber()));
+        ((TextView) findViewById(R.id.dirParada)).setText(p.getAddress());
+        ((TextView) findViewById(R.id.totParada)).setText(Integer.toString(p.getTotal()));
+        ((TextView) findViewById(R.id.dispParada)).setText(Integer.toString(p.getDispon()));
+        ((TextView) findViewById(R.id.libParada)).setText(Integer.toString(p.getLibres()));
+        ((TextView) findViewById(R.id.coordParada)).setText("Lat: " + p.getLat() + " / Lon: " + p.getLon());
 
         actualiza_Partes();
 
@@ -88,20 +88,29 @@ public class parada extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), partes.class);
-                i.putExtra(Constants.DATA_RECOVER,Constants.DATA);           ///< Parte existente
-                i.putExtra(Constants.CLASS_PARTES,partes.get(position));
+                i.putExtra(Constants.DATA_RECOVER, Constants.DATA);           ///< Parte existente
+                i.putExtra(Constants.CLASS_PARTES, partes.get(position));
+                i.putExtra(Constants.DATE, GeneralMethods.dateToString(partes.get(position).getDate()));
                 //i.putExtra(Constants.CLASS_DATABASE, (Parcelable) databaseConnector);
-                i.putExtra(Constants.CLASS_PARADA,p);
+                Log.d(Constants.CLASS_PARADA, "Seleccionado parte del dia: " + GeneralMethods.dateToString(partes.get(position).getDate()));
+                i.putExtra(Constants.CLASS_PARADA, p);
                 startActivity(i);
             }
         });
     }
 
-    private class AdapterPartes extends BaseAdapter{
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        actualiza_Partes();
+    }
+
+    private class AdapterPartes extends BaseAdapter {
 
         private ArrayList<Partes_class> items;
         private Context context;
-        public AdapterPartes (ArrayList<Partes_class> items, Context context){
+
+        public AdapterPartes(ArrayList<Partes_class> items, Context context) {
             this.items = items;
             this.context = context;
         }
@@ -113,14 +122,14 @@ public class parada extends AppCompatActivity {
 
         @Override
         public Object getItem(int position) {
-            if(items.size() > position)
+            if (items.size() > position)
                 return items.get(position);
             return null;
         }
 
         @Override
         public long getItemId(int position) {
-            if(items.size() > position)
+            if (items.size() > position)
                 return items.get(position).getParadaID();
             return -1;
         }
@@ -128,14 +137,17 @@ public class parada extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
-            if(view == null){
-                LayoutInflater.from(context).inflate(R.layout.custom_parte_row, null, false);
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.custom_parte_row, null, false);
             }
 
-            ((TextView)view.findViewById(R.id.asunto_parte)).setText(items.get(position).getNombre());
-            ((TextView)view.findViewById(R.id.tipo_parte)).setText(items.get(position).getTipoString());
+            TextView asunto = view.findViewById(R.id.asunto_parte);
+            TextView tipo = view.findViewById(R.id.tipo_parte);
 
-            //Log.d(Constants.CLASS_PARTES, "Imprimiendo parte en posición: " + position);
+            asunto.setText(items.get(position).getNombre());
+            tipo.setText(items.get(position).getTipoString());
+
+            Log.d(Constants.CLASS_PARTES, "Imprimiendo parte con fecha " + GeneralMethods.dateToString(items.get(position).getDate()));
 
             return view;
         }

@@ -11,6 +11,8 @@
     <string name="descripci_n_del_parte">Descripción del parte</string>
     <string name="tipo">Tipo</string>
     <string name="estado">Estado</string>
+    <string name="asunto_del_parte">Asunto del Parte</string>
+    <string name="tipo_de_parte">Tipo de Parte:</string>
     <string-array name="estados">
         <item>Abierto</item>
         <item>Cerrado</item>

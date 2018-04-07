@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Constants;
+import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.DatabaseConnector;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.HTTPConnector;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.Parada_class;
 import es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.R;
@@ -40,10 +41,10 @@ public class ListaParadas extends AppCompatActivity {
     /**
      * Metodo para mostrar por pantalla y almacenar las paradas de un arraylist de paradas.
      * Se llama desde HTTP conector
+     *
      * @param nuevaListaparada lista de paradas que va a ser guardada en la aplicacion.
      */
-    public void refreshScreen(ArrayList<Parada_class> nuevaListaparada)
-    {
+    public void refreshScreen(ArrayList<Parada_class> nuevaListaparada) {
         try {
             Collections.sort(nuevaListaparada, new Parada_class.ParadaComparator());
             l = findViewById(R.id.list);
@@ -52,16 +53,14 @@ public class ListaParadas extends AppCompatActivity {
             adapterParadas.notifyDataSetChanged();
             Context ctx = getApplicationContext();
             l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                         @Override
-                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                             Log.d("ListaParadas","Parada seleccionada en posición " + position);
-                                             goToParadaInfo(position);
-                                         }
-                                     });
-                    paradas = nuevaListaparada;
-        }
-        catch(Exception e)
-        {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d("ListaParadas", "Parada seleccionada en posición " + position);
+                    goToParadaInfo(position);
+                }
+            });
+            paradas = nuevaListaparada;
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -129,7 +128,6 @@ public class ListaParadas extends AppCompatActivity {
     }
 
 
-
     public class AdapterParadas extends BaseAdapter {
         private Context context;
         private Parada_class[] items;
@@ -173,6 +171,8 @@ public class ListaParadas extends AppCompatActivity {
             TextView t2 = view.findViewById(R.id.num_paradas);
             TextView t3 = view.findViewById(R.id.nombre_parada);
 
+            int partes = (new DatabaseConnector(getApplicationContext())).ObtenerComunicadoPorID(p.getNumber()).size();
+            p.setPartes(partes);
             t1.setText(getString(R.string.n_parada) + " " + Integer.toString((int) p.getNumber()));
             t2.setText(getString(R.string.partes) + " " + Integer.toString(p.getPartes()));
             t3.setText(p.getAddress());

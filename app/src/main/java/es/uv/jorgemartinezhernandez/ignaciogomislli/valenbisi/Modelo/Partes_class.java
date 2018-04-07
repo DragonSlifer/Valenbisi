@@ -12,8 +12,8 @@ import java.util.Date;
  * Valenbisi.es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.
  */
 
-public class Partes_class implements Parcelable{
-    private String nombre, descripcion,parada;
+public class Partes_class implements Parcelable {
+    private String nombre, descripcion, parada;
     private long paradaID;
     private int estado;
     private int tipo;
@@ -21,50 +21,6 @@ public class Partes_class implements Parcelable{
 
     public Partes_class() {
     }
-
-    /**
-     * Constructor de partes a partir de un cursor
-     * @param c Cursor apuntando a una fila en la tabla de tipo parte
-     * @return ArrayList de partes
-     */
-    public static ArrayList<Partes_class> getParteFromCursor(Cursor c){
-        ArrayList<Partes_class> partes_classArrayList = new ArrayList<>();
-
-        if(c.moveToFirst()){
-            do{
-                Partes_class aux = new Partes_class();
-                aux.nombre         = c.getString(0);
-                aux.descripcion    = c.getString(1);
-                aux.paradaID       = c.getLong(2);
-                aux.parada         = c.getString(3);
-                aux.estado         = c.getInt(4);
-                aux.tipo           = c.getInt(5);
-                partes_classArrayList.add(aux);
-            }while(c.moveToNext());
-        }
-
-        return partes_classArrayList;
-    }
-
-    /**
-     * Constructor a partir de datos
-     * @param nombre Nombre del parte
-     * @param descripcion Información del parte
-     * @param parada Nombre de parada
-     * @param paradaID ID de parada
-     * @param estado Estado del parte
-     * @param tipo Tipo de parte
-     */
-    public Partes_class(String nombre, String descripcion, String parada, long paradaID, int estado, int tipo) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.parada = parada;
-        this.paradaID = paradaID;
-        this.estado = estado;
-        this.tipo = tipo;
-    }
-
-    //Funciones para implementar parcelable
 
     protected Partes_class(Parcel in) {
         nombre = in.readString();
@@ -101,6 +57,53 @@ public class Partes_class implements Parcelable{
             return new Partes_class[size];
         }
     };
+
+    /**
+     * Constructor de partes a partir de un cursor
+     *
+     * @param c Cursor apuntando a una fila en la tabla de tipo parte
+     * @return ArrayList de partes
+     */
+    public static ArrayList<Partes_class> getParteFromCursor(Cursor c) {
+        ArrayList<Partes_class> partes_classArrayList = new ArrayList<>();
+
+        if (c.moveToFirst()) {
+            do {
+                Partes_class aux = new Partes_class();
+                aux.nombre = c.getString(0);
+                aux.descripcion = c.getString(1);
+                aux.paradaID = c.getLong(2);
+                aux.parada = c.getString(3);
+                aux.estado = c.getInt(4);
+                aux.tipo = c.getInt(5);
+                aux.date = GeneralMethods.stringToDate(c.getString(6));
+                partes_classArrayList.add(aux);
+            } while (c.moveToNext());
+        }
+
+        return partes_classArrayList;
+    }
+
+    /**
+     * Constructor a partir de datos
+     *
+     * @param nombre      Nombre del parte
+     * @param descripcion Información del parte
+     * @param parada      Nombre de parada
+     * @param paradaID    ID de parada
+     * @param estado      Estado del parte
+     * @param tipo        Tipo de parte
+     */
+    public Partes_class(String nombre, String descripcion, String parada, long paradaID, int estado, int tipo) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.parada = parada;
+        this.paradaID = paradaID;
+        this.estado = estado;
+        this.tipo = tipo;
+    }
+
+    //Funciones para implementar parcelable
 
     //Getters y setters
 
@@ -155,7 +158,7 @@ public class Partes_class implements Parcelable{
     public String getTipoString() {
         String s = "";
 
-        switch (tipo){
+        switch (tipo) {
             case 0:
                 s = "Mecánico";
                 break;
@@ -181,7 +184,7 @@ public class Partes_class implements Parcelable{
         this.date = date;
     }
 
-    public String[] getCampos(){
+    public String[] getCampos() {
         return new String[]{
                 Constants.paradaID,
                 Constants.date,
@@ -193,10 +196,10 @@ public class Partes_class implements Parcelable{
         };
     }
 
-    public String[] getValores(){
+    public String[] getValores() {
         return new String[]{
                 Long.toString(this.paradaID),
-                "'" + this.date.toString() + "'",
+                "'" + GeneralMethods.dateToString(this.date) + "'",
                 "'" + this.parada + "'",
                 "'" + this.descripcion + "'",
                 "'" + this.nombre + "'",

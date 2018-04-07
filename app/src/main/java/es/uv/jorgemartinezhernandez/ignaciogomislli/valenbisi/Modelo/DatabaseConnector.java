@@ -16,7 +16,7 @@ import java.util.Map;
  * Valenbisi.es.uv.jorgemartinezhernandez.ignaciogomislli.valenbisi.Modelo.
  */
 
-public class DatabaseConnector extends SQLiteOpenHelper{
+public class DatabaseConnector extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
     public static final int DATABASE_VERSION = 1;
@@ -30,15 +30,15 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String create = GeneralMethods.generateCreateTableString(Constants.tabla,new String[]{
-                Constants.nombre        + " TEXT NOT NULL",
-                Constants.descripcion   + " TEXT NOT NULL",
-                Constants.paradaID      + " INTEGER NOT NULL",
-                Constants.parada        + " TEXT NOT NULL",
-                Constants.estado        + " INTEGER NOT NULL",
-                Constants.tipo          + " INTEGER NOT NULL",
-                Constants.date          + " TEXT NOT NULL",
-                "PRIMARY KEY (" + Constants.date + ", "+Constants.paradaID+")"
+        String create = GeneralMethods.generateCreateTableString(Constants.tabla, new String[]{
+                Constants.nombre + " TEXT NOT NULL",
+                Constants.descripcion + " TEXT NOT NULL",
+                Constants.paradaID + " INTEGER NOT NULL",
+                Constants.parada + " TEXT NOT NULL",
+                Constants.estado + " INTEGER NOT NULL",
+                Constants.tipo + " INTEGER NOT NULL",
+                Constants.date + " TEXT NOT NULL",
+                "PRIMARY KEY (" + Constants.date + ", " + Constants.paradaID + ")"
         });
         db.execSQL(create);
 
@@ -47,63 +47,64 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        getReadableDatabase().execSQL("DROP TABLE IF EXISTS "+Constants.tabla);
+        getReadableDatabase().execSQL("DROP TABLE IF EXISTS " + Constants.tabla);
 
     }
 
-    public ArrayList<Map<String,String>> generalSelect_1Table(String camps, String from, String where){
-        ArrayList<Map<String,String>> retval = new ArrayList<>();
+    public ArrayList<Map<String, String>> generalSelect_1Table(String camps, String from, String where) {
+        ArrayList<Map<String, String>> retval = new ArrayList<>();
 
-        String select = GeneralMethods.generateSelectString(camps,from,where);
-        Cursor cursor = getReadableDatabase().rawQuery(select,null);
+        String select = GeneralMethods.generateSelectString(camps, from, where);
+        Cursor cursor = getReadableDatabase().rawQuery(select, null);
 
-        if(cursor.moveToFirst()){
-            do{
-                Map<String,String> map = new HashMap<>();
+        if (cursor.moveToFirst()) {
+            do {
+                Map<String, String> map = new HashMap<>();
                 int columns = cursor.getColumnCount();
-                for (int i = 0; i < columns; i++){
-                    switch (cursor.getType(i)){
+                for (int i = 0; i < columns; i++) {
+                    switch (cursor.getType(i)) {
                         case Cursor.FIELD_TYPE_INTEGER:
-                            map.put(cursor.getColumnName(i) + Constants.regex + "I",Integer.toString(cursor.getInt(i)));
+                            map.put(cursor.getColumnName(i) + Constants.regex + "I", Integer.toString(cursor.getInt(i)));
                             break;
                         case Cursor.FIELD_TYPE_FLOAT:
-                            map.put(cursor.getColumnName(i) + Constants.regex + "F",Float.toString(cursor.getFloat(i)));
+                            map.put(cursor.getColumnName(i) + Constants.regex + "F", Float.toString(cursor.getFloat(i)));
                             break;
                         case Cursor.FIELD_TYPE_STRING:
-                            map.put(cursor.getColumnName(i) + Constants.regex + "S",cursor.getString(i));
-                        break;
+                            map.put(cursor.getColumnName(i) + Constants.regex + "S", cursor.getString(i));
+                            break;
                     }
                 }
                 retval.add(map);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return retval;
     }
 
 
-    public void InsertarComunicado(String tabla, String[] campos, String[] valores){
-        String insert = GeneralMethods.generateInsertString(tabla,campos,valores);
+    public void InsertarComunicado(String tabla, String[] campos, String[] valores) {
+        String insert = GeneralMethods.generateInsertString(tabla, campos, valores);
         getReadableDatabase().execSQL(insert);
     }
 
-    public void InsertarComunicado(String tabla, String campos, String valores){
-        String insert = GeneralMethods.generateInsertString(tabla,campos.split(","),valores.split(","));
+    public void InsertarComunicado(String tabla, String campos, String valores) {
+        String insert = GeneralMethods.generateInsertString(tabla, campos.split(","), valores.split(","));
         getReadableDatabase().execSQL(insert);
     }
 
-    public void ActualizarComunicado(String tabla, String[] campos, String where){
-        String update = GeneralMethods.generateUpdateString(tabla,campos,where);
+    public void ActualizarComunicado(String tabla, String[] campos, String[] valores, String where) {
+        String update = GeneralMethods.generateUpdateString(tabla, campos, valores, where);
         getReadableDatabase().execSQL(update);
     }
 
-    public void BorrarComunicado(String tabla, String where){
-        String delete = GeneralMethods.generateDeleteString(tabla,where);
+    public void BorrarComunicado(String tabla, String where) {
+        String delete = GeneralMethods.generateDeleteString(tabla, where);
+        Log.d(Constants.CLASS_DATABASE, "Delete: " + delete);
         getReadableDatabase().execSQL(delete);
     }
 
-    public ArrayList<Partes_class> ObtenerComunicadoPorParada(String parada){
-        String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.parada + " = '" + parada + "'");
-        Cursor c = getReadableDatabase().rawQuery(select,null);
+    public ArrayList<Partes_class> ObtenerComunicadoPorParada(String parada) {
+        String select = GeneralMethods.generateSelectString("*", Constants.tabla, Constants.parada + " = '" + parada + "'");
+        Cursor c = getReadableDatabase().rawQuery(select, null);
         ArrayList<Partes_class> partes_classes = new ArrayList<>();
 
         partes_classes = Partes_class.getParteFromCursor(c);
@@ -111,11 +112,11 @@ public class DatabaseConnector extends SQLiteOpenHelper{
         return partes_classes;
     }
 
-    public ArrayList<Partes_class> ObtenerComunicadoPorID(long ID){
-        String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.paradaID + " = '" + ID + "'");
+    public ArrayList<Partes_class> ObtenerComunicadoPorID(long ID) {
+        String select = GeneralMethods.generateSelectString("*", Constants.tabla, Constants.paradaID + " = '" + ID + "'");
         //Log.d("Isnull?",select);
         //System.out.println(db);
-        Cursor c = getReadableDatabase().rawQuery(select,null);
+        Cursor c = getReadableDatabase().rawQuery(select, null);
 
         ArrayList<Partes_class> partes_classes = new ArrayList<>();
 
