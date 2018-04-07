@@ -30,7 +30,6 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         String create = GeneralMethods.generateCreateTableString(Constants.tabla,new String[]{
                 Constants.nombre        + " TEXT NOT NULL",
                 Constants.descripcion   + " TEXT NOT NULL",
@@ -39,7 +38,7 @@ public class DatabaseConnector extends SQLiteOpenHelper{
                 Constants.estado        + " INTEGER NOT NULL",
                 Constants.tipo          + " INTEGER NOT NULL",
                 Constants.date          + " TEXT NOT NULL",
-                "PRIMARY KEY (" + Constants.date + ", Constants.paradaID)"
+                "PRIMARY KEY (" + Constants.date + ", "+Constants.paradaID+")"
         });
         db.execSQL(create);
 
@@ -48,6 +47,7 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        getReadableDatabase().execSQL("DROP TABLE IF EXISTS "+Constants.tabla);
 
     }
 
@@ -83,22 +83,22 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     public void InsertarComunicado(String tabla, String[] campos, String[] valores){
         String insert = GeneralMethods.generateInsertString(tabla,campos,valores);
-        db.execSQL(insert);
+        getReadableDatabase().execSQL(insert);
     }
 
     public void InsertarComunicado(String tabla, String campos, String valores){
         String insert = GeneralMethods.generateInsertString(tabla,campos.split(","),valores.split(","));
-        db.execSQL(insert);
+        getReadableDatabase().execSQL(insert);
     }
 
     public void ActualizarComunicado(String tabla, String[] campos, String where){
         String update = GeneralMethods.generateUpdateString(tabla,campos,where);
-        db.execSQL(update);
+        getReadableDatabase().execSQL(update);
     }
 
     public void BorrarComunicado(String tabla, String where){
         String delete = GeneralMethods.generateDeleteString(tabla,where);
-        db.execSQL(delete);
+        getReadableDatabase().execSQL(delete);
     }
 
     public ArrayList<Partes_class> ObtenerComunicadoPorParada(String parada){
@@ -113,8 +113,8 @@ public class DatabaseConnector extends SQLiteOpenHelper{
 
     public ArrayList<Partes_class> ObtenerComunicadoPorID(long ID){
         String select = GeneralMethods.generateSelectString("*",Constants.tabla,Constants.paradaID + " = '" + ID + "'");
-        Log.d("Isnull?",select);
-        System.out.println(db);
+        //Log.d("Isnull?",select);
+        //System.out.println(db);
         Cursor c = getReadableDatabase().rawQuery(select,null);
 
         ArrayList<Partes_class> partes_classes = new ArrayList<>();

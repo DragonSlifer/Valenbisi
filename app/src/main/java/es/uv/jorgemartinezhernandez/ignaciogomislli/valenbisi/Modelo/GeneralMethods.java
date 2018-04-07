@@ -88,7 +88,7 @@ public class GeneralMethods {
      * Generador de consultas Insert a la base de datos
      */
     public static String generateInsertString(String tabla, String[] campos, String[] valores){
-        String insert = Constants.update;
+        String insert = Constants.insert;
         String campos_s;
 
         insert = insert.replaceFirst(Constants.regex, tabla);
@@ -96,7 +96,7 @@ public class GeneralMethods {
         if(campos.length == valores.length){
             campos_s = arrayToString(campos,",");
             insert = insert.replaceFirst(Constants.regex,campos_s);
-            campos_s = arrayToString(campos,",");
+            campos_s = arrayToString(valores,",");
             insert = insert.replaceFirst(Constants.regex,campos_s);
         } else {
             insert = null;

@@ -156,16 +156,16 @@ public class Partes_class implements Parcelable{
         String s = "";
 
         switch (tipo){
-            case 1:
+            case 0:
                 s = "Mecánico";
                 break;
-            case 2:
+            case 1:
                 s = "Eléctrico";
                 break;
-            case 3:
+            case 2:
                 s = "Pintura";
                 break;
-            case 4:
+            case 3:
                 s = "Obra de Paleta";
                 break;
         }
